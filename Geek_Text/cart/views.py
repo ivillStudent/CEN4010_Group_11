@@ -1,21 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from bookdetails.models import BookInfo
-from .models import Cart, CartItem, OrderItem, Order, SavedItems
+from book_details.models import Book
+from .models import Cart, CartItem, OrderItem, Order, ItemsSaved
 
 
-def cart_home(request):
+def home(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
-    saved_obj = SavedItems.objects.all()
-    cart_price_update(cart_obj)
-    return render(request, "carts/home.html", {"cart": cart_obj, "Saveditems": saved_obj})
+    saved_obj = ItemsSaved.objects.all()
+    cart_Totalprice(cart_obj)
+    return render(request, "carts/home.html", {"cart": cart_obj, "ItemsSaved": saved_obj})
 
 
-def cart_checkout_home(request):
+def checkout_home(request):
      return render(request, "carts/checkout.html")
 
 
-def cart_checkout(request):
+def checkout(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
     all_cartItems = cart_obj.cartItems.all()
     order = Order.objects.create()
@@ -55,7 +55,7 @@ def cart_add_book(request):
     return redirect("cart:home")
 
 
-def cart_update_quantity(request):
+def book_quantity(request):
     quantity = request.POST.get('quantity') if request.POST.get(
         'quantity') != None else 1
     item_id = request.POST.get('cartItemId')
@@ -66,29 +66,29 @@ def cart_update_quantity(request):
     return redirect("cart:home")
 
 
-def cart_save_for_later(request):
+def cart_save(request):
     cart_item_id = request.POST.get('item_id')
     if cart_item_id is not None:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         item = CartItem.objects.get(id=cart_item_id)
-        saved_book = SavedItems()
+        saved_book = ItemsSaved()
         saved_book.book = item.book
         cart_obj.cartItems.remove(cart_item_id)
         saved_book.save()
     return redirect('cart:home')
 
 
-def cart_delete_from_saved(request):
-    savedItems_id = request.POST.get('item_id')
-    saved_book = SavedItems.objects.get(id=savedItems_id)
+def cart_delete(request):
+    itemsSaved_id = request.POST.get('item_id')
+    saved_book = ItemsSaved.objects.get(id=itemsSaved_id)
     saved_book.delete()
     return redirect('cart:home')
 
 
 def cart_add_back(request):
-    savedItems_id = request.POST.get('item_id')
-    print(savedItems_id)
-    saved_book = SavedItems.objects.get(id=savedItems_id)
+    itemsSaved_id = request.POST.get('item_id')
+    print(itemsSaved_id)
+    saved_book = ItemsSaved.objects.get(id=itemsSaved_id)
     book_id = saved_book.book.id
     book_id = str(book_id)
     if book_id is not None:
@@ -104,7 +104,7 @@ def cart_add_back(request):
     return redirect('cart:home')
 
 
-def cart_remove_book(request):
+def remove_book(request):
     cart_item_id = request.POST.get('item_id')
     if cart_item_id is not None:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
@@ -114,7 +114,7 @@ def cart_remove_book(request):
     return redirect("cart:home")
 
 
-def cart_price_update(cart):
+def cart_Totalprice(cart):
     all_cartItems = cart.cartItems.all()
     sub_total = 0
     tax = 1.07
