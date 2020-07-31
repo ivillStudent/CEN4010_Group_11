@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+   <head>
+   <meta charset="UTF-8">
+   <title>Group11</title>
+   </head>
+   <body>
+       <!-- full page -->
+       <div id="page">
+      
+          <!-- top page -->
+          <div id="top">
+              <table width="100%">
+                  <tr>
+                      <td width="95%">
+                          <img alt="logo" src="images/logo.png"/>
+                      <td/>
+                      <td>
+                         <img alt="cart" src="images/cart.gif"/>
+                        <a href="#">Shopping Chart</a>
+                        <a href="#">Help</a>
+                         <a href="#">My Account</a>
+                       <a href="#">Sign up</a>
+                     <td/>
+              </table>
+         </div>
+
+  {% if cart.cartItems.exists %}
+  <table class="table" style="margin-top:2%">
+    <thead>
+      <tr>
+        <th>Item #</th>
+        <th>Image Preview</th>
+        <th>Book Name</th>
+        <th>Book Price</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart.cartItems.all %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}
+        </th>
+        <td>
+          <img src="{{ item.book.cover.url }}" width="60%" />
+        </td>
+        <td>
+          <div class="row">
+            <a href='/books/{{item.book.id}}'>{{ item.book.title }}</a>
+            <form class='form-product-ajax' method='POST' action='remove/' class="form"> {% csrf_token %}
+              <input type='hidden' name='item_id' value='{{ item.id }}' />
+              <button type='submit' class='btn btn-danger btn-sm' style="padding:5px;margin-top: 5px">Remove</button>
+              </span>
+            </form>
+            <form class='form-product-ajax' method='POST' action='update_save/' class="form"> {% csrf_token %}
+              <input type='hidden' name='item_id' value='{{ item.id }}' />
+              <button type='submit' class='btn btn-success btn-sm' style="padding:5px;margin-top: 5px">Save For Later</button>
+              </span>
+            </form>
+          </div>
+        </td>
+        <td>${{ item.price }}</td>
+
+        <td>
+          <form class='form-product-ajax' method='POST' action="update_quantity/" class="form"> {% csrf_token %} {% csrf_token %}
+            <input type='hidden' name='cartItemId' value='{{ item.id }}' />
+            <select class="quantity" name="quantity" onchange="this.form.submit()">
+              <option value={{item.quantity}} selected> {{item.quantity}}</option>
+              {% for i in "x"|ljust:"10" %}
+              <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+              {% endfor %}
+            </select>
+          </form>
+        </td>
+
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan="4"></td>
+        <td>
+          <b>Subtotal: </b> ${{ cart.subtotal }}</td>
+      </tr>
+      <tr>
+        <td colspan="4"></td>
+        <td>
+          <b>Sales Tax: </b> ${{ cart.subtotal|mul:.07}}</td>
+      </tr>
+
+      <tr>
+        <td colspan="4"></td>
+        <td>
+          <b>Total:</b> ${{ cart.total }}</td>
+      </tr>
+      <tr>
+        <td colspan="4"></td>
+        <td>
+          <form method='GET' action='/cart/checkout/' data-endpoint='/cart/checkout/' class="form"> {% csrf_token %}
+            <button type='submit' class="btn btn-block btn-success " role="button">Checkout</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+
+          {% for item2 in Saveditems.all %}
+          <tr>
+            <td>
+              <img src="{{ item2.book.cover.url }}" width="60%" />
+            </td>
+            <td>
+              <div class="row">
+                <a href='/books/{{item2.book.id}}'>{{ item2.book.title }}</a>
+                <form class='form-product-ajax' method='POST' action='remove_save/' class="form"> {% csrf_token %}
+                  <input type='hidden' name='item_id' value='{{ item2.id }}' />
+                  <button type='submit' class='btn btn-danger btn-sm' style="padding:5px;margin-top: 5px">Remove</button>
+                  </span>
+                </form>
+                <form class='form-product-ajax' method='POST' action='add_back/' class="form"> {% csrf_token %}
+                  <input type='hidden' name='item_id' value='{{ item2.id }}' />
+                  <button type='submit' class='btn btn-success btn-sm' style="padding:5px;margin-top: 5px">Add to Cart</button>
+                  </span>
+                </form>
+              </div>
+            </td>
+            <td>{{ item2.book.price }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+ <!-- bottom -->
+        // <div id="bottom">
+             <table width="100%" bgcolor="#EFEEDC">
+                <tr>
+                     <td rowspan="2">
+                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                         <img alt="logo" src="images/logo.png">
+                     </td>
+                     <td>
+                        CONTACT US
+                    </td>
+                 </tr>
+                 <tr>
+                     <td>
+                         CEN 4010 Group 11 &copy; BookStore All Rights RESERVED
+                     </td>
+                 </tr>
+             </table>
+        </div>
+  </html>
