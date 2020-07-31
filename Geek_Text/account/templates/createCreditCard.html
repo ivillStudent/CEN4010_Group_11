@@ -1,0 +1,15 @@
+{% extends "base_account.html" %}
+
+{% block title %}Create Credit Card{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h2>Here You can create a new Credit Card</h2>
+    <form method="POST" class="form-group">
+        {%csrf_token%}
+        {{creditcard|crispy}}
+        <p>Fields with * are required</p>
+        <button type="submit" class="btn btn-success">Create Card</button>
+    </form>
+{% endblock %}

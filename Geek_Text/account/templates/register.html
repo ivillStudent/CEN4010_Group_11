@@ -1,0 +1,16 @@
+{% extends "base_account.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method="POST" class="form-group">
+        {%csrf_token%}
+        {{register|crispy}}
+        {{address|crispy}}
+        {{creditcard|crispy}}
+        <p>Fields with * are required</p>
+        <button type="submit" class="btn btn-success">Register</button>
+    </form>
+{% endblock %}

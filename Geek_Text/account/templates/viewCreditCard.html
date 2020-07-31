@@ -1,0 +1,33 @@
+{% extends 'base_account.html' %}
+
+{% block title %}View CreditCards {% endblock %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+You are logged in as {{ user }}.
+<a href="/logout">Click here to log out.</a>
+{% else %}
+You are not logged in.
+<a href="/login">Click here to log in.</a>
+{% endif %}
+
+<h1>Here are the credit cards for {{ user }}</h1>
+<h2>You can create a new card... <a href="/createCreditCard">here</a>.</h2>
+
+        
+          {% for CreditCard in cc_list %}
+          <hr style="border: 2px solid black;" />
+              Credit Car name: {{CreditCard.card_name}}
+              <br> 
+              Credit Car number: {{CreditCard.card_number}}
+              <br> 
+              Credit Car expiration date: {{CreditCard.card_expirationdate}}
+              <br> 
+              Credit Car ccv: {{CreditCard.card_ccv}}
+          {% endfor %}
+
+{% endblock %}

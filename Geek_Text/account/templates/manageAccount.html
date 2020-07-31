@@ -1,0 +1,35 @@
+{% extends 'base_account.html' %}
+
+{% block title %}Manage Account {% endblock %}
+
+{% load crispy_forms_tags %}
+
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+  You are logged in as {{ user }}.
+  <a href="/logout">Click here to log out.</a>
+{% else %}
+  You are not logged in.
+  <a href="/login">Click here to log in.</a>
+{% endif %}
+
+
+
+    <h1>Here you can update your user settings.</h1>
+    <h2>You can change your password <a href="/password_change">here</a>.</h2>
+    <br>
+    <h3>You can view your CreditCards <a href="/viewCreditCards">here</a>.</h3>
+
+    <form method="POST" class="form-group">
+      {%csrf_token%}
+      {{userchange|crispy}}
+      {{address|crispy}}
+        <p><input type="submit" value="Update"></p>
+    </form>
+
+
+{% endblock %}
+
