@@ -45,13 +45,8 @@ class CartsView(models.Model):
 
 class CartItem(models.Model):
     book = models.ForeignKey(
-<<<<<<< HEAD:Geek_Text/carts/models.py
         BookInfo, on_delete=models.CASCADE,
         related_name="book")
-=======
-       Book,
-        related_name='book')
->>>>>>> 754e6909f03027a07a8ecc1f669141dd640cb4b8:cart/models.py
     quantity = models.IntegerField(
         'quantity of books',
         default=1)
