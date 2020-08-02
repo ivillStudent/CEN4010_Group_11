@@ -1,5 +1,4 @@
-from book_details.models import Book, Author, Publisher, Genre, Review
-from carts.models import OrderItem
+from bookdetails.models import (BookInfo, BookAuthor)
 import django_filters
 from django_filters import OrderingFilter
 from django.db.models import Avg, Sum
@@ -55,13 +54,13 @@ class bookFilter(django_filters.FilterSet):
     o = CustomOrderingFilter(
         # tuple-mapping retains order
         fields=(
-            ('title', 'Book Title'),
+            ('bookName', 'Book Title'),
             ('author', 'Author'),
             ('price', 'Price'),
-            ('publish_date', 'Release Date'),
+            ('yearPublished', 'Release Date'),
         ),
     )
 
     class Meta:
-        model = Book
-        fields = ['title', 'author', 'genre', 'rating']
+        model = BookInfo
+        fields = ['bookName', 'author', 'genre', 'rating']

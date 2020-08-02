@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from django.http import HttpResponse
-from book_details.models import Book, Author, Publisher, Genre, Review
+from bookdetails.models import (BookInfo, BookAuthor,)
 from django.views.generic import ListView
 from .filters import bookFilter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -11,7 +11,7 @@ from django.db.models import Avg, Sum
 # Create your views here.
 def browse(request):
 
-    qs = Book.objects.annotate(top_seller = Sum('purchaed_book__quantity')).order_by('-top_seller')
+    qs = BookInfo.objects.annotate(top_seller = Sum('purchaed_book__quantity')).order_by('-top_seller')
 
     filtered = bookFilter(request.GET, queryset=qs)
     qs = filtered.qs
