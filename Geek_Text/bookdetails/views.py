@@ -1,4 +1,4 @@
-from django.shortcuts import render
+
 from django.http import HttpResponse
 from .models import BookInfo, BookAuthor
 
@@ -23,19 +23,20 @@ def bookView(request):
     
     response_html = '<br>'.join(book_list)
     return HttpResponse(response_html)
+
 class bookDetailsView(generic.DetailView):
     template_name= "book_details.html"
     #model = BookInfo
 
     def get_context_data(self, **kwargs):
         context = super(bookDetailsView, self).get_context_data(**kwargs)
-        book = books.objects.get(pk=self.kwargs.get('pk'))
-        context['book'] = books.objects.get(pk=self.kwargs.get('pk'))
+        book = BookInfo.objects.get(pk=self.kwargs.get('pk'))
+        context['book'] = BookInfo.objects.get(pk=self.kwargs.get('pk'))
         context['author'] = book.author
         return context
         
     def get_queryset(self):
-        return books.objects.all()
+        return BookInfo.objects.all()
 
     
 class bookAuthorsView(generic.DetailView):
@@ -43,10 +44,10 @@ class bookAuthorsView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context=super(bookAuthorsView, self).get_context_data(**kwargs)
-        author = authors.objects.get(pk=self.kwargs.get('pk'))
+        author = BookAuthor.objects.get(pk=self.kwargs.get('pk'))
         context['author'] = author
-        context['books'] = books.objects.filter(author=author.authorName)
+        context['books'] = BookInfo.objects.filter(author=author.authorName)
         return context
     
     def get_queryset(self):
-        return authors.objects.all()
+        return BookAuthor.objects.all()

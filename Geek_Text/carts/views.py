@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from book_details.models import Book
+from bookdetails.models import BookInfo
 from .models import Cart, CartItem, OrderItem, Order, ItemsSaved
 
 
@@ -12,7 +12,7 @@ def home(request):
 
 
 def checkout_home(request):
-     return render(request, "carts/checkout.html")
+    return render(request, "carts/checkout.html")
 
 
 def checkout(request):
@@ -44,7 +44,7 @@ def cart_add_book(request):
     book_id = request.POST.get('book_id')
     print('this is the bookid:' + book_id)
     if book_id is not None:
-        book = Book.objects.get(id=book_id)
+        book = BookInfo.objects.get(id=book_id)
         price = float(book.price.amount)
         add_book = CartItem.objects.create(
             quantity=quantity, book_id=book_id, price=price)
@@ -92,7 +92,7 @@ def cart_add_back(request):
     book_id = saved_book.book.id
     book_id = str(book_id)
     if book_id is not None:
-        book = Book.objects.get(id=book_id)
+        book = BookInfo.objects.get(id=book_id)
         price = float(book.price.amount)
         add_book = CartItem.objects.create(
             quantity=1, book_id=book_id, price=price)
@@ -109,7 +109,7 @@ def remove_book(request):
     if cart_item_id is not None:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         cart_obj.cartItems.remove(cart_item_id)
-        #updates the session variable for the icon to change on the navbar
+        # updates the session variable for the icon to change on the navbar
         request.session['cart_items'] = cart_obj.cartItems.count()
     return redirect("cart:home")
 

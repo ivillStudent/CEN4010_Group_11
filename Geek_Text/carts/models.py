@@ -1,14 +1,14 @@
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import pre_save, post_save, m2m_changed
+from bookdetails.models import BookInfo
 
-from book_details.models import Book
 User = settings.AUTH_USER_MODEL
 
 # cart manager is used to create new carts based on session and user information https://docs.djangoproject.com/en/2.0/topics/db/managers/
 
 
-class CartsView(models.Manager):
+class CartsView(models.Model):
     def new_or_get(self, request):
         cart_id = request.session.get("cart_id", None)
         qs = self.get_queryset().filter(id=cart_id)
@@ -45,8 +45,8 @@ class CartsView(models.Manager):
 
 class CartItem(models.Model):
     book = models.ForeignKey(
-        Book,
-        related_name='book')
+        BookInfo, on_delete=models.CASCADE,
+        related_name="book")
     quantity = models.IntegerField(
         'quantity of books',
         default=1)
@@ -61,17 +61,16 @@ class CartItem(models.Model):
         return str(self.id)
 
 
-
 class ItemsSaved(models.Model):
-    book = models.ForeignKey(Book)
+    book = models.ForeignKey(BookInfo, on_delete=models.CASCADE, related_name='bookSaved')
 
     def __str__(self):
-        return self.book.title
+        return self.book.bookName
 
 
 class Cart(models.Model):
     user = models.ForeignKey(
-        User,
+        User, on_delete=models.CASCADE,
         null=True,
         blank=True)
     cartItems = models.ManyToManyField(
@@ -96,30 +95,53 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+class OrderItem(models.Model):
+    book = models.ForeignKey(
+        BookInfo, on_delete=models.CASCADE,
+        related_name='purchaed_book')
+    quantity = models.IntegerField(
+        'quantity of books',
+        default=1)
+    price = models.DecimalField(
+        'Price of book',
+        max_digits=6,
+        decimal_places=2,
+        blank=True,
+        null=True)
+    book_price_quantity = models.DecimalField(
+        'Price of Line Item: BookPrice*Quantity',
+        max_digits=8,
+        decimal_places=2,
+        blank=True,
+        null=True)
+
+    def __str__(self):
+        return '{} -- {} -- {}'.format(self.id, self.book, self.quantity)
+
 
 class Order(models.Model):
     ref_code = models.CharField(max_length=15)
-    owner = models.ForeignKey('users.Profile', on_delete=models.SET_NULL, null=True)
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True)
     items = models.ManyToManyField(OrderItem)
     date_ordered = models.DateTimeField(auto_now=True)
 
     def get_cart_items(self):
-        book = self.items.filter(is_saved = False)
+        book = self.items.filter(is_saved=False)
         return book
 
     def get_save_items(self):
-        book = self.items.filter(is_saved = True)
+        book = self.items.filter(is_saved=True)
         return book
 
     def get_total_price(self):
-         total = 0
-        for item in self.items.filter(is_saved = False):
+        total = 0
+        for item in self.items.filter(is_saved=False):
             total += item.get_total_item_price()
-             return total
+        return total
 
-           
     def get_total_save_price(self):
-       total = 0
-        for item in self.items.filter(is_saved = True):
+        total = 0
+        for item in self.items.filter(is_saved=True):
             total += item.get_total_item_price()
         return total

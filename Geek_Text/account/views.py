@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import (RegisterForm, CustomUserChangeForm,
-                    AddressForm, CreditCardForm, EditAddressForm, 
-                    CreditCardViewForm)
-from .models import Address, CreditCard
+                    AddressForm, CreditCardForm, EditAddressForm)
+from .models import Address
 
 
 # Create your views here.

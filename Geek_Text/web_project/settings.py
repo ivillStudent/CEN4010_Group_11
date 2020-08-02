@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'bookdetails',
     'localflavor',
+    'carts.apps.CartsConfig',
 ]
 
 MIDDLEWARE = [
