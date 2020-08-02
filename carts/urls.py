@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import (
-    home,
+    home_carts,
     cart_add_book,
     remove_book,
     book_quantity,

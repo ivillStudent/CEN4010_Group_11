@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from account import views as v
 from book_browsing_and_sorting import views as ve
+from carts import views as vws
 
 
 from django.views.generic import TemplateView
@@ -29,6 +30,7 @@ urlpatterns = [
     path('createCreditCard/', v.createCC, name="createCreditCard"),
     path('', include("django.contrib.auth.urls")),
     path('browse/', ve.browse, name= "browse" ),
+    path('home_carts/', vws.home_carts, name="home_carts" )
     
 ]
 

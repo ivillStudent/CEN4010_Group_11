@@ -4,7 +4,7 @@ from bookdetails.models import BookInfo
 from .models import Cart, CartItem, OrderItem, Order, ItemsSaved
 
 
-def home(request):
+def home_carts(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
     saved_obj = ItemsSaved.objects.all()
     cart_Totalprice(cart_obj)
