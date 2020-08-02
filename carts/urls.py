@@ -14,7 +14,7 @@ from .views import (
 )
 
 urlpatterns = [
-    url(r'^$', home, name='homepage'),
+    url(r'^$', home_carts, name='homepage'),
     url(r'^add/$', cart_add_book, name='add'),
     url(r'^remove/$', remove_book, name='remove'),
     url(r'^update_quantity/$', book_quantity, name='update_quantity'),

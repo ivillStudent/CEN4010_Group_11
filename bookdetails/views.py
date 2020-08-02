@@ -1,7 +1,6 @@
 
 from django.http import HttpResponse
 from .models import BookInfo, BookAuthor
-
 from django.views import generic
 
 

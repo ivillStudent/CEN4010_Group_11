@@ -1,0 +1,144 @@
+{% extends "BookDetails/base.html" %}
+{% block body %}
+<p></p>
+<H1> Order Summery </H1>
+<p></p>
+
+<p></p>
+<H1> Save List </H1>
+<p></p>
+<section>
+  <div class="row">
+    <!-- <table style="width:120%"> -->
+    <table class="table table-hover table-bordered text-center">
+      <tr class="text-center">
+        <th>Item #</th>
+        <th>ItemName</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total Price</th>
+      </tr>
+      {% for item in order.get_save_items %}
+      {% if item.is_saved %}
+      <tr>
+
+        <td>{{ forloop.counter }}</td>
+        <td>
+          {{ item.product.book_name }}
+          <span class="pull-right">
+            <button><a href="{% url 'delete_from_cart' item.id %}" data-balloon="remove this book from cart">
+                Remove</button>
+            </a>
+          </span>
+          <span class="pull-center">
+            <button><a href="{% url 'add_back_item' item.id %}" data-balloon="Save this book from cart">
+                Add Back</button>
+            </a>
+          </span>
+        </td>
+        <td>{{ item.quantity }}
+          <span class="pull-center">
+            <button><a href="{% url 'add_quantity_from_cart' item.id %}" data-balloon="Add quantity">
+                +</button>
+            </a>
+          </span>
+          <span class="pull-center">
+            <button><a href="{% url 'reduce_quantity_from_cart' item.id %}" data-balloon="Reduce quantity">
+                -</button>
+            </a>
+          </span>
+        </td>
+        <td>${{ item.product.price|floatformat:3 }}</td>
+        <td>${{ item.get_total_item_price|floatformat:3 }} </td>
+      </tr>
+      {% endif %}
+      {% empty %}
+      <tr>
+        <td colspan=5> You have not added any items yet.</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan=6>
+          <strong class="pull-right">Save list Total:</strong>
+        </td>
+        <td colspan=1>
+          $<string> {{ order.get_total_save_price|floatformat:2 }}</string>
+        </td>
+      </tr>
+  </table>
+  </div>
+</section>
+
+<section>
+  <div class="row">
+    <!-- <table style="width:120%"> -->
+    <table class="table table-hover table-bordered text-center">
+      <tr class="text-center">
+        <th>ItemName</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total Price</th>
+      </tr>
+      {% for item in order.get_cart_items %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          {{ item.product.book_name }}
+          <span class="pull-left">
+            <button><a href="{% url 'delete_from_cart' item.id %}" data-balloon="remove this book from cart">
+                Remove</button>
+            </a>
+          </span>
+          <span class="pull-center">
+            <button><a href="{% url 'save_item' item.id %}" data-balloon="Save this book from cart">
+                Save</button>
+            </a>
+          </span>
+        </td>
+        <td>{{ item.quantity }}
+          <span class="pull-center">
+            <button><a href="{% url 'add_quantity_from_cart' item.id %}" data-balloon="Add quantity">
+                +</button>
+            </a>
+          </span>
+          <span class="pull-center">
+            <button><a href="{% url 'reduce_quantity_from_cart' item.id %}" data-balloon="Reduce quantity">
+                -</button>
+            </a>
+          </span>
+        </td>
+        <td>${{ item.product.price|floatformat:2 }}</td>
+        <td>${{ item.get_total_item_price|floatformat:2 }} </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan=5> You have not added any items yet.</td>
+      </tr>
+
+      {% endfor %}
+      <tr>
+        <td colspan=4>
+          <strong class="pull-center">Order Total:</strong>
+        </td>
+        <td colspan=1>
+          $<string> {{ order.get_total_price|floatformat:2 }}</string>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan=2>
+          <button><a href="{% url 'index' %}">
+              {% if order %}Continue Shopping{% else %}Add Items to Cart {% endif %}
+            </a></button>
+        </td>
+        <td colspan=3>
+          {% if order.get_cart_items %}
+          <button><a href="{% url 'checkout' %}">Proceed To Checkout</a></button>
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+{% endblock body%}
