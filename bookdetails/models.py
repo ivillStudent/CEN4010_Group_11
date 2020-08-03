@@ -15,14 +15,14 @@ class BookAuthor(models.Model):
 
 class BookInfo(models.Model):
     author=models.ForeignKey(BookAuthor,on_delete=models.CASCADE,related_name="bookAuthor",null=True)
-    bookName = models.CharField(max_length=100, unique=True,default='')
+    bookName = models.CharField(max_length=100,null=False, unique=True,default='name')
     description = models.CharField(max_length=1000,default='')
     genre = models.CharField(max_length=30,default='')
     price = models.DecimalField(max_digits=5, decimal_places=2,default='')
     publisher = models.CharField(max_length=1000,default='')
     bookISBN= models.CharField(max_length=100, unique=True,default='')
     yearPublished= models.CharField(max_length=5,default='')
-    copiesSold=models.CharField(max_length=100000000,default='')
+    copiesSold=models.CharField(max_length=100000000,default=0, null=False)
 
 
     def __str__(self):

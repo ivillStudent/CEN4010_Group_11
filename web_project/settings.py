@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'bookdetails',
     'localflavor',
     'carts.apps.CartsConfig',
-    'book_browsing_and_sorting',
+    'adminsortable'
 ]
 
 MIDDLEWARE = [
